@@ -1,0 +1,50 @@
+
+    // function testEnterRaffleWhenNotOpen() public {
+    //     vm.deal(PLAYER, STARTING_PLAYER_BALANCE);
+    //     vm.startPrank(PLAYER);
+    //     raffle.enterRaffle{value: entranceFee}();
+    //     raffle.performUpkeep(""); // Need to create a simulation of Chainlink callback
+    //     vm.expectRevert(Raffle.Raffle__RaffleNotOpen.selector);
+    //     raffle.enterRaffle{value: entranceFee}();
+    //     vm.stopPrank();
+    // }
+
+    // function testCheckUpkeepReturnsFalseWhenNotOpen() public {
+    //     // Simulate closing the raffle
+    //     raffle.performUpkeep("");
+    //     (bool upkeepNeeded, ) = raffle.checkUpkeep("");
+    //     assert(!upkeepNeeded);
+    // }
+
+    // function testCheckUpkeepReturnsTrueWhenConditionsMet() public {
+    //     vm.deal(PLAYER, STARTING_PLAYER_BALANCE);
+    //     vm.startPrank(PLAYER);
+    //     raffle.enterRaffle{value: entranceFee}(); // Enter the raffle
+    //     vm.warp(block.timestamp + interval); // Move time forward
+    //     (bool upkeepNeeded, ) = raffle.checkUpkeep("");
+    //     assert(upkeepNeeded);
+    //     vm.stopPrank();
+    // }
+
+    // function testPerformUpkeepRevertsWhenNotNeeded() public {
+    //     vm.expectRevert(Raffle.Raffle__UpkeepNotNeeded.selector);
+    //     raffle.performUpkeep(""); // Attempt to perform upkeep when not needed
+    // }
+
+    // function testWinnerSelection() public {
+    //     vm.deal(PLAYER, STARTING_PLAYER_BALANCE);
+    //     vm.startPrank(PLAYER);
+    //     raffle.enterRaffle{value: entranceFee}(); // Player enters
+    //     vm.deal(address(0xBEEF), STARTING_PLAYER_BALANCE); // Another player
+    //     vm.startPrank(address(0xBEEF));
+    //     raffle.enterRaffle{value: entranceFee}(); // Another player enters
+    //     vm.stopPrank();
+
+    //     // Move time forward to trigger upkeep
+    //     vm.warp(block.timestamp + interval);
+    //     raffle.performUpkeep(""); // Perform upkeep to select a winner
+
+    //     // Check that the winner was picked
+    //     address winner = raffle.getPickedWinner(); // Assuming you have a getter for recent winner
+    //     assert(winner == PLAYER || winner == address(0xBEEF)); // Winner should be one of the players
+    // }

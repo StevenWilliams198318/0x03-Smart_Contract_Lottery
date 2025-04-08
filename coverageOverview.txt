@@ -1,0 +1,33 @@
+Compiling 42 files with Solc 0.8.28
+Solc 0.8.28 finished in 2.63s
+Compiler run successful!
+Analysing contracts...
+Running tests...
+
+Ran 7 tests for test/unit/RaffleTest.t.sol:RaffleTest
+[PASS] testCheckUpkeepReturnsFalseIfItHasNoBalance() (gas: 20775)
+[PASS] testCheckUpkeepReturnsFalseIfRaffleIsntOpen() (gas: 224271)
+[PASS] testDontAllowPlayersToEnterWhileRaffleIsCalculating() (gas: 229362)
+[PASS] testEnterRaffleWithInsufficientFundsReverts() (gas: 11177)
+[PASS] testEnteringRaffleEmitsEvent() (gas: 69668)
+[PASS] testRaffleInitializesInOpenState() (gas: 8095)
+[PASS] testRaffleRecordsPlayersWhenTheyEnter() (gas: 69442)
+Suite result: ok. 7 passed; 0 failed; 0 skipped; finished in 11.24ms (2.47ms CPU time)
+
+Ran 1 test suite in 66.97ms (11.24ms CPU time): 7 tests passed, 0 failed, 0 skipped (7 total tests)
+
+╭---------------------------+-----------------+-----------------+---------------+----------------╮
+| File                      | % Lines         | % Statements    | % Branches    | % Funcs        |
++================================================================================================+
+| script/DeployRaffle.s.sol | 87.50% (14/16)  | 95.00% (19/20)  | 100.00% (1/1) | 50.00% (1/2)   |
+|---------------------------+-----------------+-----------------+---------------+----------------|
+| script/HelperConfig.s.sol | 80.95% (17/21)  | 90.00% (18/20)  | 40.00% (2/5)  | 60.00% (3/5)   |
+|---------------------------+-----------------+-----------------+---------------+----------------|
+| script/Interactions.s.sol | 46.94% (23/49)  | 45.65% (21/46)  | 50.00% (1/2)  | 33.33% (3/9)   |
+|---------------------------+-----------------+-----------------+---------------+----------------|
+| src/Raffle.sol            | 64.00% (32/50)  | 65.96% (31/47)  | 50.00% (2/4)  | 60.00% (6/10)  |
+|---------------------------+-----------------+-----------------+---------------+----------------|
+| test/mocks/LinkToken.sol  | 11.76% (2/17)   | 7.69% (1/13)    | 0.00% (0/1)   | 20.00% (1/5)   |
+|---------------------------+-----------------+-----------------+---------------+----------------|
+| Total                     | 57.52% (88/153) | 61.64% (90/146) | 46.15% (6/13) | 45.16% (14/31) |
+╰---------------------------+-----------------+-----------------+---------------+----------------╯
