@@ -17,3 +17,4 @@ docs/
 lib/forge-std
 lib/foundry-devops
 lib/solmate
+lib/chainlink-brownie-contracts/
