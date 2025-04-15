@@ -1,3 +1,4 @@
+/*
 // LAYOUT OF CONTRACT:
 // version
 // imports
@@ -22,15 +23,18 @@
 
 // FUNCTIONS FLOW:
 // CEI: 1. Checks, 2. Effects(internal contract states), 3. Interactions(external contract interactions) Pattern
+*/
 
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
 
 import {Test, console} from "forge-std/Test.sol";
+import "forge-std/console.sol";
 import {Vm} from "forge-std/Vm.sol";
 import {HelperConfig} from "script/HelperConfig.s.sol";
 import {DeployRaffle} from "script/DeployRaffle.s.sol";
 import {Raffle} from "../../src/Raffle.sol";
+import {VRFCoordinatorV2_5Mock} from "@chainlink/contracts/src/v0.8/vrf/mocks/VRFCoordinatorV2_5Mock.sol";
 
 contract RaffleTest is Test {
     Raffle public raffle;
@@ -67,6 +71,15 @@ contract RaffleTest is Test {
                             RAFFLE TESTS
     //////////////////////////////////////////////////////////////*/
 
+    modifier raffleEntered() {
+        // Arrange
+        vm.prank(PLAYER);
+        raffle.enterRaffle{value: entranceFee}();
+        vm.warp(block.timestamp + interval + 1); // speeds up time
+        vm.roll(block.number + 1); // increments the current block number by one
+        _;
+    }
+
     function testRaffleInitializesInOpenState() public view {
         assert(raffle.getRaffleState() == Raffle.RaffleState.OPEN);
     }
@@ -99,12 +112,10 @@ contract RaffleTest is Test {
         raffle.enterRaffle{value: entranceFee}();
     }
 
-    function testDontAllowPlayersToEnterWhileRaffleIsCalculating() public {
-        // Arrange
-        vm.prank(PLAYER);
-        raffle.enterRaffle{value: entranceFee}();
-        vm.warp(block.timestamp + interval + 1); // speeds up time
-        vm.roll(block.number + 1); // increments the current block number by one
+    function testDontAllowPlayersToEnterWhileRaffleIsCalculating()
+        public
+        raffleEntered
+    {
         raffle.performUpkeep("");
 
         // Act / Assert
@@ -129,12 +140,10 @@ contract RaffleTest is Test {
         assert(!upkeepNeeded);
     }
 
-    function testCheckUpkeepReturnsFalseIfRaffleIsntOpen() public {
-        // Arrange
-        vm.prank(PLAYER);
-        raffle.enterRaffle{value: entranceFee}();
-        vm.warp(block.timestamp + interval + 1);
-        vm.roll(block.number + 1);
+    function testCheckUpkeepReturnsFalseIfRaffleIsntOpen()
+        public
+        raffleEntered
+    {
         raffle.performUpkeep("");
 
         // Act
@@ -156,13 +165,10 @@ contract RaffleTest is Test {
         assert(!upkeepNeeded);
     }
 
-    function testCheckUpkeepReturnsTrueWhenParametersAreGood() public {
-        // Arrange
-        vm.prank(PLAYER);
-        raffle.enterRaffle{value: entranceFee}();
-        vm.warp(block.timestamp + interval + 1);
-        vm.roll(block.number + 1);
-
+    function testCheckUpkeepReturnsTrueWhenParametersAreGood()
+        public
+        raffleEntered
+    {
         // Act
         (bool upkeepNeeded, ) = raffle.checkUpkeep("");
 
@@ -174,13 +180,10 @@ contract RaffleTest is Test {
                         PERFORMUPKEEP
     //////////////////////////////////////////////////////////////*/
 
-    function testPerformUpkeepCanOnlyRunIfCheckUpkeepIsTrue() public {
-        // Arrange
-        vm.prank(PLAYER);
-        raffle.enterRaffle{value: entranceFee}();
-        vm.warp(block.timestamp + interval + 1);
-        vm.roll(block.number + 1);
-
+    function testPerformUpkeepCanOnlyRunIfCheckUpkeepIsTrue()
+        public
+        raffleEntered
+    {
         // Act / Assert
         (bool upkeepNeeded, ) = raffle.checkUpkeep("");
         assert(upkeepNeeded);
@@ -211,13 +214,14 @@ contract RaffleTest is Test {
         raffle.performUpkeep("");
     }
 
-    function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() public {
-        // Arrange
-        vm.prank(PLAYER);
-        raffle.enterRaffle{value: entranceFee}();
-        vm.warp(block.timestamp + interval + 1);
-        vm.roll(block.number + 1);
+    /*//////////////////////////////////////////////////////////////
+                TESTING RAFFLE STATE AND EMIT REQUESTID
+    //////////////////////////////////////////////////////////////*/
 
+    function testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId()
+        public
+        raffleEntered
+    {
         // Act
         (bool upkeepNeeded, ) = raffle.checkUpkeep("");
         console.log("Upkeep Needed:", upkeepNeeded);
@@ -232,6 +236,9 @@ contract RaffleTest is Test {
         // Extract requestId from logs
         bytes32 requestId = entries[1].topics[1];
 
+        // Log the number of events recorded
+        console.log("Number of events:", entries.length);
+
         // Assert
         Raffle.RaffleState raffleState = raffle.getRaffleState();
         assert(uint256(requestId) > 0);
@@ -242,10 +249,20 @@ contract RaffleTest is Test {
                         FULFILLRANDOMWORDS
     //////////////////////////////////////////////////////////////*/
 
-    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep() public {
-        // Arrange
-        // Act
-        // Assert
+    function testFulfillRandomWordsCanOnlyBeCalledAfterPerformUpkeep(uint256 randomRequestId)
+        public
+        raffleEntered
+    {
+        // Arrange / Act / Assert 
+        /**Stateless Fuzz Test Intro: Using args 'uint256 randomRequestId' try break test 256 attempts
+         * Check with 'forge test xxxx' (runs: attemptsHere, μ: 80397, ~: 80397)
+        */
+        vm.expectRevert(VRFCoordinatorV2_5Mock.InvalidRequest.selector);
+        VRFCoordinatorV2_5Mock(vrfCoordinator).fulfillRandomWords(
+            randomRequestId,
+            address(raffle)
+        );
+
     }
 
     function testFulfillRandomWordsPicksAWinnerResetsAndSendsMoney() public {

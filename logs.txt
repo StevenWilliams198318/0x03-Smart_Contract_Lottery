@@ -1,0 +1,51 @@
+No files changed, compilation skipped
+
+Ran 1 test for test/unit/RaffleTest.t.sol:RaffleTest
+[PASS] testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId() (gas: 227611)
+Logs:
+  Creating subscription on chain Id:  31337
+  Your subscription with ID:  7570848181127581986339189052072122886913734678723205985508750752041200654908
+  Please update the subscription ID in the HelperConfi.s.sol
+  Using vrfCoordinator: 0x34A1D3fff3958843C43aD80F30b94c510645C316
+  Funding subscription:  7570848181127581986339189052072122886913734678723205985508750752041200654908
+  On ChainId: 31337
+  Adding consumer contract:  0xDB8cFf278adCCF9E9b5da745B44E754fC4EE3C76
+  To vrfCoordinator:  0x34A1D3fff3958843C43aD80F30b94c510645C316
+  On ChainId: 31337
+  Upkeep Needed: true
+  Number of events: 2
+
+Traces:
+  [227611] RaffleTest::testPerformUpkeepUpdatesRaffleStateAndEmitsRequestId()
+    ├─ [0] VM::prank(player: [0x44E97aF4418b7a17AABD8090bEA0A471a366305C])
+    │   └─ ← [Return] 
+    ├─ [47740] Raffle::enterRaffle{value: 10000000000000000}()
+    │   ├─ emit RaffleEntered(player: player: [0x44E97aF4418b7a17AABD8090bEA0A471a366305C])
+    │   └─ ← [Stop] 
+    ├─ [0] VM::warp(32)
+    │   └─ ← [Return] 
+    ├─ [0] VM::roll(2)
+    │   └─ ← [Return] 
+    ├─ [3460] Raffle::checkUpkeep(0x) [staticcall]
+    │   └─ ← [Return] true, 0x
+    ├─ [0] console::log("Upkeep Needed:", true) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [0] VM::recordLogs()
+    │   └─ ← [Return] 
+    ├─ [143653] Raffle::performUpkeep(0x)
+    │   ├─ [115435] 0x34A1D3fff3958843C43aD80F30b94c510645C316::requestRandomWords(RandomWordsRequest({ keyHash: 0xc3d5bc4d5600fa71f7a50b9ad841f14f24f9ca4236fd00bdb5fda56b052b28a4, subId: 7570848181127581986339189052072122886913734678723205985508750752041200654908 [7.57e75], requestConfirmations: 3, callbackGasLimit: 500000 [5e5], numWords: 1, extraArgs: 0x92fd13380000000000000000000000000000000000000000000000000000000000000000 }))
+    │   │   ├─ emit RandomWordsRequested(keyHash: 0xc3d5bc4d5600fa71f7a50b9ad841f14f24f9ca4236fd00bdb5fda56b052b28a4, requestId: 1, preSeed: 100, subId: 7570848181127581986339189052072122886913734678723205985508750752041200654908 [7.57e75], minimumRequestConfirmations: 3, callbackGasLimit: 500000 [5e5], numWords: 1, extraArgs: 0x92fd13380000000000000000000000000000000000000000000000000000000000000000, sender: Raffle: [0xDB8cFf278adCCF9E9b5da745B44E754fC4EE3C76])
+    │   │   └─ ← [Return] 1
+    │   ├─ emit RequestedRaffleWinner(requestId: 1)
+    │   └─ ← [Stop] 
+    ├─ [0] VM::getRecordedLogs()
+    │   └─ ← [Return] [([0xeb0e3652e0f44f417695e6e90f2f42c99b65cd7169074c5a654b16b9748c3a4e, 0xc3d5bc4d5600fa71f7a50b9ad841f14f24f9ca4236fd00bdb5fda56b052b28a4, 0x10bcf2be64c261e434a6014656bea8260621c8940cfe977cd11416455f3a1a3c, 0x000000000000000000000000db8cff278adccf9e9b5da745b44e754fc4ee3c76], 0x000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000640000000000000000000000000000000000000000000000000000000000000003000000000000000000000000000000000000000000000000000000000007a120000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000002492fd1338000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000, 0x34A1D3fff3958843C43aD80F30b94c510645C316), ([0xcd6e45c8998311cab7e9d4385596cac867e20a0587194b954fa3a731c93ce78b, 0x0000000000000000000000000000000000000000000000000000000000000001], 0x, 0xDB8cFf278adCCF9E9b5da745B44E754fC4EE3C76)]
+    ├─ [0] console::log("Number of events:", 2) [staticcall]
+    │   └─ ← [Stop] 
+    ├─ [412] Raffle::getRaffleState() [staticcall]
+    │   └─ ← [Return] 1
+    └─ ← [Stop] 
+
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 15.80ms (1.60ms CPU time)
+
+Ran 1 test suite in 1.42s (15.80ms CPU time): 1 tests passed, 0 failed, 0 skipped (1 total tests)

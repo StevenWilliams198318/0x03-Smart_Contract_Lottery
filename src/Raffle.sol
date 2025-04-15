@@ -165,6 +165,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
                 )
             });
         uint256 requestId = s_vrfCoordinator.requestRandomWords(request);
+
         emit RequestedRaffleWinner(requestId);
 
         // 1.0 Get random number
